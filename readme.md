@@ -1,11 +1,17 @@
 # Gulp 4.0 整理
+
+
 這個是整理的快速環境，提供使用
 ---
 ## Gulp版本使用
+
+
 CLI version: 2.2.0
 Local version: 4.0.2
 ---
 ## Node版本
+
+
 Node version: 12.2.0
 NPM version: 6.9.0
 ---
