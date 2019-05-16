@@ -11,6 +11,10 @@ const cssnano = require("cssnano")
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
+// Html 模板
+const twig = require('gulp-twig');
+// 壓縮圖片
+const imagemin = require('gulp-imagemin');
 // Live 同步
 const browsersync = require("browser-sync").create()
 
@@ -19,7 +23,7 @@ function style() {
     return gulp
         .src('./asset/scss/*.scss')
         .pipe(sass())
-        .pipe(postcss([autoprefixer({browsers: ['last 5 version']}), cssnano()]))
+        .pipe(postcss([autoprefixer({ browsers: ['last 5 version'] }), cssnano()]))
         .pipe(gulp.dest('./asset/css/'))
         .pipe(browsersync.stream())
 }
@@ -27,11 +31,28 @@ function style() {
 // ES6
 function minifyJS() {
     return gulp
-        .src('./asset/js/original/*.js')
+        .src('./asset/js/original/*.js', '!./asset/js/plugin/*') // 排除套件JS !./asset/js/plugin/*
         .pipe(babel())
         .pipe(uglify())
-        .pipe(concat('all.js'))
+        .pipe(concat('all.js')) // 合併成一包
         .pipe(gulp.dest('./asset/js/minify/'));
+}
+
+// twig
+function temp() {
+    'use strict';
+    return gulp
+        .src('./templates/index.twig')
+        .pipe(twig())
+        .pipe(gulp.dest('.'));
+};
+
+// 壓縮圖片
+function minifyImages() {
+    return gulp
+        .src('./asset/images/original/*')
+        .pipe(imagemin())
+        .pipe(gulp.dest('./asset/images/minify/'));
 }
 
 // Live 同步
@@ -44,6 +65,7 @@ function browserSync() {
     });
 
     gulp.watch('./asset/scss/*.scss', style);
+    gulp.watch('./templates/*', temp).on('change', browsersync.reload);
     gulp.watch('./asset/js/original/*.js', minifyJS).on('change', browsersync.reload);
     gulp.watch('*.html').on('change', browsersync.reload)
 }
@@ -52,3 +74,5 @@ function browserSync() {
 exports.watch = browserSync;
 exports.style = style;
 exports.minifyJS = minifyJS;
+exports.minifyImages = minifyImages
+exports.temp = temp

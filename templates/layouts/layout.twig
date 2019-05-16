@@ -10,16 +10,11 @@
  
 </head>
 <body> 
+    {% include "../includes/header.twig" %}
+
+    {% block content %}
+    {% endblock %}
     
-<header>
-   <p>I'am header</p>
-</header>
-    <p>
-    I am main
-</p>
-    
-    
-<footer>
-   <p>I'am footer</p>
-</footer></body>
+    {% include "../includes/footer.twig" %}
+</body>
 </html>
