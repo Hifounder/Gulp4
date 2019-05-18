@@ -40,9 +40,8 @@ function minifyJS() {
 
 // twig
 function temp() {
-    'use strict';
     return gulp
-        .src('./templates/index.twig')
+        .src('./templates/*.twig')
         .pipe(twig())
         .pipe(gulp.dest('.'));
 };
@@ -65,7 +64,7 @@ function browserSync() {
     });
 
     gulp.watch('./asset/scss/*.scss', style);
-    gulp.watch('./templates/*', temp).on('change', browsersync.reload);
+    gulp.watch('./templates/**', temp).on('change', browsersync.reload);
     gulp.watch('./asset/js/original/*.js', minifyJS).on('change', browsersync.reload);
     gulp.watch('*.html').on('change', browsersync.reload)
 }
